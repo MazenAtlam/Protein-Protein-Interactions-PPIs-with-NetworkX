@@ -1,0 +1,9 @@
+# Core Graph & Math Libraries
+networkx>=3.0
+numpy>=1.24.0
+
+# Visualization
+matplotlib>=3.7.0
+
+# Bioinformatics & API
+bioservices>=1.11.0
