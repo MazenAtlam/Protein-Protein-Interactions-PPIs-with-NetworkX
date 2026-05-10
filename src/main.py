@@ -1,3 +1,6 @@
+from id_converter import get_gene_names
+from connectivity_analysis import run_connectivity_analysis, print_degree_statistics, get_protein_neighbors
+from graph_builder import parse_data, build_graph, export_adjacency_matrix
 import os
 import sys
 from pathlib import Path
@@ -7,37 +10,37 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
     sys.path.append(current_dir)
 
-from graph_builder import parse_data, build_graph, export_adjacency_matrix
-from connectivity_analysis import run_connectivity_analysis, print_degree_statistics, get_protein_neighbors
-from id_converter import get_gene_names
 
 # --- Phase 5: Test Variables ---
 # Recommended test proteins from the implementation plan
-PROTEIN_A = "P15056" 
-PROTEIN_B = "P08069" 
+PROTEIN_A = "P15056"
+PROTEIN_B = "P08069"
 PROTEIN_LIST = ["P15056", "P08069", "O15111"]
+
 
 def main():
     # 1. Setup paths
     base_dir = Path(__file__).resolve().parent.parent
     data_path = base_dir / "data" / "PathLinker_2018_human-ppi-weighted-cap0_75.txt"
     results_dir = base_dir / "results"
-    
+
     # Ensure results directory exists
     os.makedirs(results_dir, exist_ok=True)
 
     print("=== PPI Network Analysis Pipeline ===")
-    
+
     # 2. Phase 1: Foundation & Data Parsing
     print("\n--- Phase 1: Building Graph ---")
     # Subsampling for performance during testing (optional)
-    tails, heads, weights, distances, edge_types = parse_data(str(data_path), max_edges=10000)
+    tails, heads, weights, distances, edge_types = parse_data(
+        str(data_path), max_edges=50000)
     graph = build_graph(tails, heads, weights, distances)
-    
+
     # Export adjacency matrix
     adj_matrix_path = results_dir / "4_adjacency_matrix.csv"
     export_adjacency_matrix(graph, str(adj_matrix_path))
-    print(f"Graph built with {graph.number_of_nodes()} nodes and {graph.number_of_edges()} edges.")
+    print(
+        f"Graph built with {graph.number_of_nodes()} nodes and {graph.number_of_edges()} edges.")
     print(f"Adjacency matrix saved to {adj_matrix_path}")
 
     # 3. Phase 2: Connectivity & Statistics
@@ -49,7 +52,8 @@ def main():
     print("\n--- Phase 2.5: Protein Neighbors Analysis ---")
     try:
         neighbors_output = results_dir / "0_protein_neighbors.txt"
-        neighbor_data = get_protein_neighbors(graph, PROTEIN_A, str(neighbors_output))
+        neighbor_data = get_protein_neighbors(
+            graph, PROTEIN_A, str(neighbors_output))
         print(f"Protein {PROTEIN_A}:")
         print(f"  Total degree: {neighbor_data['total_degree']}")
         print(f"  In-degree: {neighbor_data['in_degree']}")
@@ -74,6 +78,7 @@ def main():
         print(f"  {uid} -> {gene}")
 
     print("\n=== Pipeline Execution Completed Successfully ===")
+
 
 if __name__ == "__main__":
     main()

@@ -222,8 +222,8 @@ def visualize_path_subnetwork(
         else:
             node_colors.append("#3498db")   # peter-river blue
 
-    # ── Layout: Kamada-Kawai produces clean, force-directed positions ─
-    pos = nx.kamada_kawai_layout(subgraph)
+    # ── Layout: use spring_layout to avoid a SciPy dependency ─
+    pos = nx.spring_layout(subgraph, seed=42)
 
     # ── Edge labels: show the weight on each arrow ───────────────────
     edge_labels = {
