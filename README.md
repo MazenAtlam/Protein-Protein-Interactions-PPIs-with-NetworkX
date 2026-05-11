@@ -15,28 +15,28 @@ This project analyzes a directed protein-protein interaction (PPI) network using
 ```text
 ├── data
 │   └── PathLinker_2018_human-ppi-weighted-cap0_75.txt
-├── README.md
-├── requirements.txt
 ├── results
 │   ├── 2_single_protein_degree.txt
 │   ├── 3_multiprotein_histogram.png
 │   ├── 3_multiprotein_ranked.txt
-│   └── 4_adjacency_matrix.csv
+│   ├── 4_adjacency_matrix.csv
+│   ├── large_graph_sample.png
+│   └── sub_sample_graph.png
 ├── src
+│   └── test
+│   │   ├── __init__.py
+│   │   ├── test_connectivity.py
+│   │   └── test_path_analysis.py
 │   ├── __init__.py
-│   ├── __pycache__
-│   │   ├── __init__.cpython-310.pyc
-│   │   ├── graph_builder.cpython-310.pyc
-│   │   └── graph_builder.cpython-312.pyc
 │   ├── connectivity_analysis.py
 │   ├── graph_builder.py
 │   ├── id_converter.py
 │   ├── main.py
 │   ├── path_analysis.py
-│   └── test
-│       ├── __init__.py
-│       └── test_path_analysis.py
-└── test_connectivity.py
+│   └── visualize_graph.py
+├── .gitignore
+├── README.md
+└── requirements.txt
 ```
 
 ## Requirements
@@ -49,20 +49,31 @@ pip install -r requirements.txt
 
 ## How to run
 
-Run the full pipeline from the project root:
+1. Run the full pipeline from the project root:
 
-```bash
-python3 src/main.py
-```
+    ```bash
+    python3 src/main.py
+    ```
 
-This will:
+    This will:
 
-1. Parse a sample of the PathLinker network.
-2. Build a directed NetworkX graph `nx.DiGraph()`.
-3. Save the adjacency matrix to `results/4_adjacency_matrix.csv`.
-4. Generate connectivity outputs in `results/`.
-5. Run shortest-path analysis if the chosen source and target proteins exist in the graph.
-6. Query UniProt for gene-name mapping.
+    1. Parse a sample of the PathLinker network.
+    2. Build a directed NetworkX graph `nx.DiGraph()`.
+    3. Save the adjacency matrix to `results/4_adjacency_matrix.csv`.
+    4. Generate connectivity outputs in `results/`.
+    5. Run shortest-path analysis if the chosen source and target proteins exist in the graph.
+    6. Query UniProt for gene-name mapping.
+
+2. Run the graph visualization script
+
+    ```bash
+    python3 src/visualize_graph.py
+    ```
+
+    This will generate two graphs:
+
+    1. `results/sub_sample_graph.png`: a smaller sample of the proteins and their interactions.
+    2. `results/large_graph_sample.png`: a larger sample of the proteins and their interactions.
 
 ## Output files
 
@@ -72,6 +83,8 @@ This will:
 - `results/3_multiprotein_histogram.png`
 - `results/1_shortest_paths.txt`
 - `results/1_shortest_paths_subnetwork.png`
+- `results/large_graph_sample.png`
+- `results/sub_sample_graph.png`
 
 ## Notes
 
